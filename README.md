@@ -1,4 +1,4 @@
-```
+
 ![Plasmo Notion](https://github.com/TH-Activities/saturday-hack-night-template/assets/64391274/85d3fbb8-aed6-4751-b051-4539df392f1a)
 
 
@@ -18,4 +18,4 @@ Library Name - Version
 Instructions for setting up project
 ## How to Run
 Instructions for running
-```
+
