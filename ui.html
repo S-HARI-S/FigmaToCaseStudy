@@ -1,52 +1,93 @@
 <h2>Convert Figma into case study</h2>
-<div class="main" style="display: flex; align-items: center; justify-content: center; ">
-  <div class="card" style="display: flex; align-items: center; justify-content: center; flex-direction: column;">
-    <textarea name="Title" id="" cols="33" rows="2" placeholder="Title"></textarea>
-    <button style="margin-top: 10px;" onclick="selectFrames()" >Select frames</button>
-    <div id="repeatDiv">
-      <div class="repeat" style="display: flex; align-items: center; justify-content: center; flex-direction: column;">
-        <textarea style="margin-top: 10px;" name="Text1" id="" cols="30" rows="2" placeholder="Text1"></textarea>
-        <button style="margin-top: 10px;" onclick="addFrames()">Add more frames</button>
-      </div>
-    </div>
-    <button style="margin-top: 10px;">Next section</button>
-  </div>
+<div class="main" style="display: flex; align-items: center; justify-content: center;">
+  <div id="cardsContainer" style="display: flex; flex-wrap: wrap;"></div>
 </div>
 
-
+<button id="nextSectionBtn" style="margin-top: 10px;">Next section</button>
 
 <script>
+let frameCount = 1;
+let cardCount = 1;
 
-  function selectFrames()
-  {
-    parent.postMessage({ pluginMessage: 'clicked' }, '*')
-  }
-
-function addFrames() {
-  console.log("addMoreFrames was clicked");
-  var newDiv = document.createElement("div");
-  newDiv.style.display ="flex";
-  newDiv.style.alignItems ="center";
-  newDiv.style.justifyContent ="center";
-
-  newDiv.classList.add("repeat"); 
-  var textArea = document.createElement("textarea");
-  textArea.style.marginTop = "10px";
-  textArea.name = "Text1";
-  textArea.cols = "30";
-  textArea.rows = "2";
-  textArea.placeholder = "Text1";
-
-  var button = document.createElement("button");
-  button.style.marginTop = "10px";
-  button.textContent = "Add more frames";
-  button.onclick = addFrames;
-
-  newDiv.appendChild(textArea);
-  newDiv.appendChild(button);
-
-  document.getElementById('repeatDiv').appendChild(newDiv);
+function selectFrames() {
+  figma.ui.onmessage = (message) => {
+    main();
+  };
 }
 
+function addFrames(parentDiv) {
 
+  const newRepeatDiv = document.createElement('div');
+  newRepeatDiv.className = 'repeat';
+  newRepeatDiv.style.display = 'flex';
+  newRepeatDiv.style.alignItems = 'center';
+  newRepeatDiv.style.justifyContent = 'center';
+  newRepeatDiv.style.flexDirection = 'column';
+
+  // Create elements inside the new "repeat" div
+  const selectFramesButton = document.createElement('button');
+  selectFramesButton.style.marginTop = '10px';
+  selectFramesButton.textContent = 'Select frames';
+  selectFramesButton.onclick = selectFrames;
+
+  const textarea = document.createElement('textarea');
+  textarea.style.marginTop = '10px';
+  textarea.name = 'Text' + frameCount;
+  textarea.id = '';
+  textarea.cols = '30';
+  textarea.rows = '2';
+  textarea.placeholder = 'Text' + frameCount;
+
+  // Append elements to the new "repeat" div
+  newRepeatDiv.appendChild(selectFramesButton);
+  newRepeatDiv.appendChild(textarea);
+
+  // Append the new "repeat" div to the parent container
+  parentDiv.appendChild(newRepeatDiv);
+
+  frameCount++;
+}
+
+function createNewCard() {
+  const cardsContainer = document.getElementById('cardsContainer');
+
+  // Create a new "card" div
+  const newCardDiv = document.createElement('div');
+  newCardDiv.className = 'card';
+  newCardDiv.style.display = 'flex';
+  newCardDiv.style.alignItems = 'center';
+  newCardDiv.style.justifyContent = 'center';
+  newCardDiv.style.flexDirection = 'column';
+
+  // Create elements inside the new "card" div
+  const cardTitleTextarea = document.createElement('textarea');
+  cardTitleTextarea.style.marginTop = '10px';
+  cardTitleTextarea.name = 'Title' + cardCount;
+  cardTitleTextarea.id = '';
+  cardTitleTextarea.cols = '33';
+  cardTitleTextarea.rows = '2';
+  cardTitleTextarea.placeholder = 'Title';
+
+  const cardRepeatDiv = document.createElement('div');
+  cardRepeatDiv.id = 'repeatDiv';
+  cardRepeatDiv.style.display = 'flex';
+  cardRepeatDiv.style.flexDirection = 'column';
+
+  const cardAddFramesButton = document.createElement('button');
+  cardAddFramesButton.style.marginTop = '10px';
+  cardAddFramesButton.textContent = 'Add more frames';
+  cardAddFramesButton.onclick = () => addFrames(cardRepeatDiv);
+
+  // Append elements to the new "card" div
+  newCardDiv.appendChild(cardTitleTextarea);
+  newCardDiv.appendChild(cardRepeatDiv);
+  newCardDiv.appendChild(cardAddFramesButton);
+
+  // Append the new "card" div to the cards container
+  cardsContainer.appendChild(newCardDiv);
+
+  cardCount++;
+}
+
+document.getElementById('nextSectionBtn').onclick = createNewCard;
 </script>
