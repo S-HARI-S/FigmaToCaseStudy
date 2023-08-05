@@ -1,17 +1,52 @@
-<h2>Shape Creator</h2>
-<p>Count: <input id="count" type="number" value="5"></p>
-<button id="create">Create</button>
-<button id="cancel">Cancel</button>
+<h2>Convert Figma into case study</h2>
+<div class="main" style="display: flex; align-items: center; justify-content: center; ">
+  <div class="card" style="display: flex; align-items: center; justify-content: center; flex-direction: column;">
+    <textarea name="Title" id="" cols="33" rows="2" placeholder="Title"></textarea>
+    <button style="margin-top: 10px;" onclick="selectFrames()" >Select frames</button>
+    <div id="repeatDiv">
+      <div class="repeat" style="display: flex; align-items: center; justify-content: center; flex-direction: column;">
+        <textarea style="margin-top: 10px;" name="Text1" id="" cols="30" rows="2" placeholder="Text1"></textarea>
+        <button style="margin-top: 10px;" onclick="addFrames()">Add more frames</button>
+      </div>
+    </div>
+    <button style="margin-top: 10px;">Next section</button>
+  </div>
+</div>
+
+
+
 <script>
 
-document.getElementById('create').onclick = () => {
-  const textbox = document.getElementById('count');
-  const count = parseInt(textbox.value, 10);
-  parent.postMessage({ pluginMessage: { type: 'create-shapes', count } }, '*')
+  function selectFrames()
+  {
+    parent.postMessage({ pluginMessage: 'clicked' }, '*')
+  }
+
+function addFrames() {
+  console.log("addMoreFrames was clicked");
+  var newDiv = document.createElement("div");
+  newDiv.style.display ="flex";
+  newDiv.style.alignItems ="center";
+  newDiv.style.justifyContent ="center";
+
+  newDiv.classList.add("repeat"); 
+  var textArea = document.createElement("textarea");
+  textArea.style.marginTop = "10px";
+  textArea.name = "Text1";
+  textArea.cols = "30";
+  textArea.rows = "2";
+  textArea.placeholder = "Text1";
+
+  var button = document.createElement("button");
+  button.style.marginTop = "10px";
+  button.textContent = "Add more frames";
+  button.onclick = addFrames;
+
+  newDiv.appendChild(textArea);
+  newDiv.appendChild(button);
+
+  document.getElementById('repeatDiv').appendChild(newDiv);
 }
 
-document.getElementById('cancel').onclick = () => {
-  parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
-}
 
 </script>
