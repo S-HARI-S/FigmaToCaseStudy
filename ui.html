@@ -1,0 +1,41 @@
+<h2>Figma to case-study </h2>
+<form>
+  <textarea name="Text" id="Text" cols="30" rows="2"></textarea>
+  <label for="img">Select image:</label>
+  <input type="file" id="img" name="img" accept="image/*">
+  <button onclick="Submit()">Submit</button>
+</form>
+
+<script>
+
+let dataArray = [];
+
+function Submit() {
+      let textData = document.getElementById('Text').value;
+      let imageData = document.getElementById('img').files[0]; // We'll store only the first selected image for simplicity.
+
+      const dataObject = {
+  array1: textData,
+  array2: imageData,
+};
+
+const jsonData = JSON.stringify(dataObject);
+
+fetch('url_of_receiving_script', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: jsonData,
+})
+  .then(response => response.json())
+  .then(data => {
+    // Handle the response from the receiving script if necessary
+    console.log('Response from receiving script:', data);
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+    }
+
+</script>
